@@ -1,0 +1,74 @@
+// examples/hibrido.minipar
+// Demonstra os três paradigmas juntos:
+// POO + Paralelismo (par/spawn/sync) + Distribuição (node/remote)
+
+node worker1 = "127.0.0.1:7001";
+node worker2 = "127.0.0.1:7002";
+
+// ── POO ──────────────────────────────────────────────────────────────
+class Vetor {
+    var number x;
+    var number y;
+
+    func Vetor(var number vx, var number vy) {
+        x = vx;
+        y = vy;
+    }
+
+    func number norma_quadrado() {
+        return x * x + y * y;
+    }
+
+    func string to_string() {
+        return "vetor";
+    }
+}
+
+class VetorColorido extends Vetor {
+    var string cor;
+
+    func VetorColorido(var number vx, var number vy, var string c) {
+        x = vx;
+        y = vy;
+        cor = c;
+    }
+
+    override func string to_string() {
+        return cor;
+    }
+}
+
+// ── Funções remotas ───────────────────────────────────────────────────
+remote func number produto_escalar(var number ax, var number ay,
+                                    var number bx, var number by) {
+    return ax * bx + ay * by;
+}
+
+// ── Código principal ──────────────────────────────────────────────────
+var Vetor v1 = new Vetor(3, 4);
+var Vetor v2 = new VetorColorido(1, 2, "azul");
+
+print("Norma^2 v1:", v1.norma_quadrado());
+print("Norma^2 v2:", v2.norma_quadrado());
+print("v2 cor:", v2.to_string());
+
+// Paralelismo: processar dois vetores simultaneamente
+var number lock;
+lock = 0;
+var number soma_normas;
+soma_normas = 0;
+
+par {
+    sync(lock) {
+        soma_normas = soma_normas + v1.norma_quadrado();
+    }
+    sync(lock) {
+        soma_normas = soma_normas + v2.norma_quadrado();
+    }
+}
+
+print("Soma das normas^2:", soma_normas);
+
+// Chamada remota distribuída
+remote on worker1 produto_escalar(3, 4, 1, 2);
+print("Produto escalar enviado ao worker1");
