@@ -1,0 +1,49 @@
+// examples/paralelo.minipar
+// Demonstra: par{}, spawn, sync(mutex)
+
+var number contador;
+contador = 0;
+var number lock;
+lock = 0;
+
+func void incrementar(var number vezes) {
+    var number i;
+    i = 0;
+    while (i < vezes) {
+        sync(lock) {
+            contador = contador + 1;
+        }
+        i = i + 1;
+    }
+}
+
+func void tarefa_a() {
+    print("Tarefa A iniciada");
+    incrementar(5);
+    print("Tarefa A concluida");
+}
+
+func void tarefa_b() {
+    print("Tarefa B iniciada");
+    incrementar(5);
+    print("Tarefa B concluida");
+}
+
+func void tarefa_c() {
+    print("Tarefa C iniciada");
+    incrementar(5);
+    print("Tarefa C concluida");
+}
+
+// Executar as três tarefas em paralelo
+par {
+    tarefa_a();
+    tarefa_b();
+    tarefa_c();
+}
+
+print("Contador final (esperado 15):", contador);
+
+// Spawn explícito
+spawn incrementar(3);
+print("Spawn disparado");

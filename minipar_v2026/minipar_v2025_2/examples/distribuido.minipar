@@ -1,0 +1,37 @@
+// examples/distribuido.minipar
+// Demonstra: node, remote func, remote on
+// Para testar localmente: inicie um servidor MiniPar na porta 7000 antes.
+
+node servidor_calc = "127.0.0.1:7000";
+
+remote func number somar(var number a, var number b) {
+    return a + b;
+}
+
+remote func number multiplicar(var number a, var number b) {
+    return a * b;
+}
+
+remote func string saudacao(var string nome) {
+    return nome;
+}
+
+// Chamadas remotas (fallback local se servidor indisponível)
+var number resultado;
+
+remote on servidor_calc somar(10, 20);
+print("10 + 20 enviado ao servidor");
+
+remote on servidor_calc multiplicar(6, 7);
+print("6 * 7 enviado ao servidor");
+
+remote on servidor_calc saudacao("MiniPar");
+print("Saudacao enviada ao servidor");
+
+// Execução distribuída em paralelo
+par {
+    remote on servidor_calc somar(1, 2);
+    remote on servidor_calc multiplicar(3, 4);
+}
+
+print("Chamadas paralelas remotas concluidas");
