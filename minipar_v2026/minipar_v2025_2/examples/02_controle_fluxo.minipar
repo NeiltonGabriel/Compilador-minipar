@@ -1,0 +1,14 @@
+// Controle de fluxo: if/else, while, break, continue
+var number i;
+i = 0;
+while (i < 6) {
+    if (i == 4) { break; }
+    if (i == 2) { i = i + 1; continue; }
+    print("i =", i);
+    i = i + 1;
+}
+if (i >= 3) {
+    print("parou em", i);
+} else {
+    print("cedo");
+}
