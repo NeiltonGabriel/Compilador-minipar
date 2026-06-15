@@ -1,6 +1,0 @@
-// Builtins: len, str, num
-var string nome;
-nome = "MiniPar";
-print("len:", len(nome));
-print("str:", str(2026));
-print("num+2:", num("40") + 2);

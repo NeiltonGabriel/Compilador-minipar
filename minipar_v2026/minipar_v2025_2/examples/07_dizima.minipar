@@ -1,3 +1,0 @@
-// Dizima: divisao nao-exata (ilustra limite de impressao de double no ARM)
-print("17/5:", 17 / 5);
-print("1/4:", 1 / 4);
