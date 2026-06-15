@@ -721,6 +721,7 @@ def main():
         share=args.share,
         inbrowser=not args.no_browser,
         quiet=False,
+        allowed_paths=[_BUILD_DIR]
     )
 
 
