@@ -1,0 +1,38 @@
+class Quicksort {
+    public var array_dados: list;
+
+    public func init(arr: list) -> void {
+        this.array_dados = arr;
+    }
+
+    public func ordenar() -> list {
+        return this.quicksort(this.array_dados);
+    }
+
+    public func quicksort(array: list) -> list {
+        if (len(array) <= 1) {
+            return array;
+        } else {
+            var pivot: any = array[0];
+            var menores: list = [];
+            var maiores: list = [];
+            
+            var i: number = 1;
+            while (i < len(array)) {
+                var x: any = array[i];
+                if (x <= pivot) {
+                    menores.append(x);
+                } else {
+                    maiores.append(x);
+                }
+                i = i + 1;
+            }
+            return this.quicksort(menores) + [pivot] + this.quicksort(maiores);
+        }
+    }
+}
+
+var interface_app: Quicksort = new Quicksort();
+interface_app.init([10, -3, -40, 80, 70, -100]);
+print("Vetor ordenado:");
+print(interface_app.ordenar());
