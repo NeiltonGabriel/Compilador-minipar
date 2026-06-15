@@ -1,0 +1,51 @@
+# Lado do Servidor
+class CalcServidor {
+    public func iniciar() -> void {
+        seq {
+            var calculadora: s_channel = s_channel("0.0.0.0", 5000);
+            var op: string = "";
+            var valor1: number = 0;
+            var valor2: number = 0;
+            var resultado: number = 0;
+
+            print("Servidor aguardando operação...");
+            calculadora.receive(op, valor1, valor2, resultado);
+
+            if (op == "+") {
+                resultado = valor1 + valor2;
+            }
+            if (op == "-") {
+                resultado = valor1 - valor2;
+            }
+            if (op == "*") {
+                resultado = valor1 * valor2;
+            }
+            if (op == "/") {
+                resultado = valor1 / valor2;
+            }
+
+            calculadora.send(op, valor1, valor2, resultado);
+            print("Resultado enviado ao cliente.");
+        }
+    }
+}
+
+# Lado do Cliente
+class CalcCliente {
+    public func executar() -> void {
+        seq {
+            var calculadora: c_channel = c_channel("localhost", 5000);
+            var op: string = "+";
+            var valor1: number = 10;
+            var valor2: number = 5;
+            var resultado: number = 0;
+
+            print("Enviando requisição de soma...");
+            calculadora.send(op, valor1, valor2, resultado);
+
+            calculadora.receive(op, valor1, valor2, resultado);
+            print("Resultado recebido:");
+            print(resultado);
+        }
+    }
+}

@@ -1,0 +1,49 @@
+class Neuronio {
+    public var input_val: number;
+    public var output_desejado: number;
+    public var peso: number;
+    public var bias: number;
+    public var peso_bias: number;
+    public var taxa_aprendizado: number;
+    public var erro: number;
+    public var iteracao: number;
+
+    public func init(in_val: number, out_desejado: number) -> void {
+        this.input_val = in_val;
+        this.output_desejado = out_desejado;
+        this.peso = 0.5;
+        this.bias = 1;
+        this.peso_bias = 0.5;
+        this.taxa_aprendizado = 0.01;
+        this.erro = 9999;
+        this.iteracao = 0;
+    }
+
+    public func ativacao(soma: number) -> number {
+        if (soma >= 0) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public func treinar() -> void {
+        print("Iniciando treinamento...");
+        while (this.erro != 0) {
+            this.iteracao = this.iteracao + 1;
+            var soma: number = (this.input_val * this.peso) + (this.bias * this.peso_bias);
+            var saida: number = this.ativacao(soma);
+            this.erro = this.output_desejado - saida;
+            
+            if (this.erro != 0) {
+                this.peso = this.peso + (this.taxa_aprendizado * this.input_val * this.erro);
+                this.peso_bias = this.peso_bias + (this.taxa_aprendizado * this.bias * this.erro);
+            }
+        }
+        print("Neurónio treinado com sucesso.");
+    }
+}
+
+var neuronio: Neuronio = new Neuronio();
+neuronio.init(1, 0);
+neuronio.treinar();

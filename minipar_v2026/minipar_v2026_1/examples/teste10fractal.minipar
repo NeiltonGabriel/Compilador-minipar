@@ -1,0 +1,59 @@
+class TapeteSierpinski {
+
+    public func draw_sierpinski_carpet(var number x, var number y, var number r, var number degree) -> void {
+        
+        if (degree <= 0) {
+            return;
+        }
+
+        turtle_up();
+        turtle_goto(x - r, y - r);
+        turtle_down();
+
+        turtle_fillcolor("white");
+        turtle_begin_fill();
+
+        var number i = 0;
+        while (i < 4) {
+            turtle_forward(2 * r);
+            turtle_left(90);
+            i = i + 1;
+        }
+        
+        turtle_end_fill();
+
+        var number new_r = r / 3;
+        var number new_degree = degree - 1;
+
+        this.draw_sierpinski_carpet(x - new_r, y + new_r, new_r, new_degree);
+        this.draw_sierpinski_carpet(x + new_r, y + new_r, new_r, new_degree);
+        this.draw_sierpinski_carpet(x - new_r, y - new_r, new_r, new_degree);
+        this.draw_sierpinski_carpet(x + new_r, y - new_r, new_r, new_degree);
+
+        this.draw_sierpinski_carpet(x - new_r, y, new_r, new_degree);
+        this.draw_sierpinski_carpet(x + new_r, y, new_r, new_degree);
+        this.draw_sierpinski_carpet(x, y + new_r, new_r, new_degree);
+        this.draw_sierpinski_carpet(x, y - new_r, new_r, new_degree);
+    }
+
+    public func iniciar() -> void {
+        turtle_speed(0);
+        turtle_hideturtle();
+        turtle_tracer(100, 0);
+
+        var number initial_x = 0;
+        var number initial_y = 0;
+        var number initial_r = 150;
+        var number iterations = 8;
+
+        this.draw_sierpinski_carpet(initial_x, initial_y, initial_r, iterations);
+
+        turtle_update();
+        turtle_done();
+        
+        print("Desenho do Tapete de Sierpinski concluido!");
+    }
+}
+
+var app: TapeteSierpinski = new TapeteSierpinski();
+app.iniciar();
